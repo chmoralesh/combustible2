@@ -1,0 +1,50 @@
+body {
+  font-family: sans-serif;
+  font-size: 1.5em;
+  background: rgb(20, 20, 20);
+  padding: 40px;
+  border-radius: 1em;
+  color: rgb(214, 212, 212);
+}
+form {
+  background: rgb(35, 35, 35);
+  padding: 3em;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+label,
+input,
+button {
+  display: block;
+  margin-bottom: 10px;
+}
+.input {
+  width: 30%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background: rgb(50, 50, 50);
+  color: rgb(214, 212, 212);
+  font-size: 1.2em;
+}
+.flatpickr-calendar {
+  transform: scale(1.4);
+  transform-origin: left top;
+  transition: transform 10s;
+}
+.pdfSubmit {
+  background: rgb(0, 123, 255);
+  color: white;
+  padding: 10px 20px;
+  margin-top: 1em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+.textarea {
+  /* resize: none; */
+  /* overflow: hidden; */
+  height: auto;
+  width: 100%;
+}
