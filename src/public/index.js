@@ -86,12 +86,19 @@ form.onsubmit = async (e) => {
     console.log("Datos recibidos:", result[0]);
 
     //Generación de gráfico
+    const resultArray = Array.isArray(result) ? result : [result];
 
     const resGrafico = await fetch("/grafico", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(result),
+      body: JSON.stringify(resultArray),
     });
+
+    // const resGrafico = await fetch("/grafico", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(result),
+    // });
 
     if (!resGrafico.ok) throw new Error(`Error gráfico: ${resGrafico.status}`);
     //Consulta de estadisticas
@@ -108,7 +115,7 @@ form.onsubmit = async (e) => {
     stats = await resEstadisticas.json();
 
     //console.log("Pasé por aquí");
-    //console.log("Estadísticas recibidas:", stats);
+    console.log("Estadísticas recibidas:", stats);
   } catch (error) {
     console.error("Error al consultar:", error);
   }

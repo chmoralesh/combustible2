@@ -16,7 +16,7 @@ pool.query("SELECT NOW()", (err, res) => {
   if (err) {
     console.log("Error connecting to DB", err);
   } else {
-    console.log("🔋 Db-Connected", res.rows[0]);
+    console.log("🔋 Db-PSQL-Connected", res.rows[0]);
   }
 });
 

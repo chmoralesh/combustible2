@@ -89,7 +89,12 @@ export const buildPDF = (
     {
       headers: ["Descripción"],
       // rows: result.fields,
-      rows: [["Consumo [L/NM]"], ["Pitch [%]"], ["Velocidad [kt]"]],
+      rows: [
+        ["Pitch [%]"],
+        ["Velocidad [kt]"],
+        ["Consumo [L/NM]"],
+        ["Presión Turbo [bar]"],
+      ],
     },
     {
       headers: ["Max"],

@@ -14,7 +14,6 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
 });
 
 export async function generarGrafico(datos) {
-  console.log("Estos datos llegan a mi grafico", datos);
   if (!datos) {
     throw new Error("No se recibieron datos para generar gráfico");
   }
@@ -38,10 +37,6 @@ export async function generarGrafico(datos) {
   const rpm = datos[1];
   const velocidad = datos[2];
   const _time = fechasFormateadas;
-  // const consumo = datos[0].slice().reverse();
-  // const rpm = datos[1].slice().reverse();
-  // const velocidad = datos[2].slice().reverse();
-  // const _time = fechasFormateadas.slice().reverse();
 
   const COLORS = [
     "rgb(75, 192, 192)", // Consumo
