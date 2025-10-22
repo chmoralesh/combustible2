@@ -18,35 +18,68 @@ export async function generarGrafico(datos) {
   if (!datos) {
     throw new Error("No se recibieron datos para generar gráfico");
   }
-  //Formatear tiempo
+  // //Formatear tiempo
+  // const formatearTiempo = (fechaISO) => {
+  //   const fecha = new Date(fechaISO);
+  //   const dd = String(fecha.getUTCDate()).padStart(2, "0");
+  //   const mm = String(fecha.getUTCMonth() + 1).padStart(2, "0"); // los meses van de 0-11
+  //   const hh = String(fecha.getUTCHours()).padStart(2, "0");
+  //   const min = String(fecha.getUTCMinutes()).padStart(2, "0");
+  //   const ss = String(fecha.getUTCSeconds()).padStart(2, "0");
+
+  //   return `${dd}-${mm}  ${hh}:${min}:${ss}`;
+  // };
+  // Formatear tiempo a hora chilena con 00:00 en vez de 24:00
   const formatearTiempo = (fechaISO) => {
     const fecha = new Date(fechaISO);
-    const dd = String(fecha.getUTCDate()).padStart(2, "0");
-    const mm = String(fecha.getUTCMonth() + 1).padStart(2, "0"); // los meses van de 0-11
-    const hh = String(fecha.getUTCHours()).padStart(2, "0");
-    const min = String(fecha.getUTCMinutes()).padStart(2, "0");
-    const ss = String(fecha.getUTCSeconds()).padStart(2, "0");
 
-    return `${dd}-${mm}  ${hh}:${min}:${ss}`;
+    // Obtener hora chilena usando Intl.DateTimeFormat
+    const opciones = { timeZone: "America/Santiago" };
+    const formatter = new Intl.DateTimeFormat("es-CL", {
+      ...opciones,
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+
+    // Obtener las partes de la fecha
+    const partes = formatter.formatToParts(fecha);
+    let dia = partes.find((p) => p.type === "day").value;
+    let mes = partes.find((p) => p.type === "month").value;
+    let hora = partes.find((p) => p.type === "hour").value;
+    let minuto = partes.find((p) => p.type === "minute").value;
+    let segundo = partes.find((p) => p.type === "second").value;
+
+    // Ajustar 24:00 → 00:00
+    if (hora === "24") hora = "00";
+
+    return `${dia}-${mes} ${hora}:${minuto}:${segundo}`;
   };
+
   const fechasISO = datos[3];
   const fechasFormateadas = fechasISO.map(formatearTiempo);
 
   // Extraemos los arrays según su posición
 
-  const consumo = datos[0];
-  const rpm = datos[1];
-  const velocidad = datos[2];
+  const dato0 = datos[0]; //Pitch
+  const dato1 = datos[1]; //Velocidad
+  const dato2 = datos[2]; //Rendimiento
+  const dato3 = datos[4]; //Presion Turbo
   const _time = fechasFormateadas;
-  // const consumo = datos[0].slice().reverse();
-  // const rpm = datos[1].slice().reverse();
-  // const velocidad = datos[2].slice().reverse();
+  // const Pitch = datos[0].slice().reverse();
+  // const Velocidad = datos[1].slice().reverse();
+  // const Rendimiento = datos[2].slice().reverse();
   // const _time = fechasFormateadas.slice().reverse();
 
   const COLORS = [
-    "rgb(75, 192, 192)", // Consumo
-    "rgba(192, 130, 75, 1)", // RPM
-    "rgba(89, 192, 75, 1)", // Velocidad
+    "rgb(75, 192, 192)", // Pitch
+    "rgba(192, 130, 75, 1)", // Velocidad
+    "rgba(89, 192, 75, 1)", // Rendimiento
+    "rgba(240, 23, 240, 1)", // Rendimiento
   ];
 
   const TEXTSIZE = 18; // Tamaño de letra para ejes y leyenda
@@ -60,28 +93,36 @@ export async function generarGrafico(datos) {
       labels: _time,
       datasets: [
         {
-          label: "Consumo",
-          data: consumo,
+          label: "Pitch",
+          data: dato0,
           fill: false,
           borderColor: COLORS[0],
           tension: 0.1,
-          yAxisID: "yConsumo",
-        },
-        {
-          label: "RPM",
-          data: rpm,
-          fill: false,
-          borderColor: COLORS[1],
-          tension: 0.1,
-          yAxisID: "yRpm",
+          yAxisID: "yDato0",
         },
         {
           label: "Velocidad",
-          data: velocidad,
+          data: dato1,
+          fill: false,
+          borderColor: COLORS[1],
+          tension: 0.1,
+          yAxisID: "yDato1",
+        },
+        {
+          label: "Rendimiento",
+          data: dato2,
           fill: false,
           borderColor: COLORS[2],
           tension: 0.1,
-          yAxisID: "yVelocidad",
+          yAxisID: "yDato2",
+        },
+        {
+          label: "Presión Turbo",
+          data: dato3,
+          fill: false,
+          borderColor: COLORS[3],
+          tension: 0.1,
+          yAxisID: "yDato3",
         },
       ],
     },
@@ -119,12 +160,14 @@ export async function generarGrafico(datos) {
             minRotation: 45, // ángulo mínimo de rotación
           },
         },
-        yConsumo: {
+        yDato0: {
           type: "linear",
           position: "left", // eje a la izquierda
+          min: -100,
+          max: 100,
           title: {
             display: true,
-            text: "Consumo (L/s)",
+            text: "Pitch (%)",
             color: COLORS[0],
             font: {
               size: TEXTSIZE, // tamaño de letra en px
@@ -137,12 +180,14 @@ export async function generarGrafico(datos) {
             },
           },
         },
-        yRpm: {
+        yDato1: {
           type: "linear",
           position: "left", // eje a la derecha
+          min: 0,
+          max: 20,
           title: {
             display: true,
-            text: "RPM",
+            text: "Velocidad (kn)",
             color: COLORS[1],
             font: {
               size: TEXTSIZE, // tamaño de letra en px
@@ -159,12 +204,14 @@ export async function generarGrafico(datos) {
           },
           offset: true,
         },
-        yVelocidad: {
+        yDato2: {
           type: "linear",
           position: "left", // eje a la derecha
+          min: 0,
+          max: 100,
           title: {
             display: true,
-            text: "Velocidad (km/h)",
+            text: "Rendimiento (l/Nm)",
             color: COLORS[2],
             font: {
               size: TEXTSIZE, // tamaño de letra en px
@@ -172,6 +219,28 @@ export async function generarGrafico(datos) {
           },
           ticks: {
             color: COLORS[2],
+            font: {
+              size: TEXTSIZE, // tamaño de letra en px
+            },
+          },
+          grid: { drawOnChartArea: false }, // evita superposición
+          offset: true,
+        },
+        yDato3: {
+          type: "linear",
+          position: "left", // eje a la derecha
+          min: 0,
+          max: 3,
+          title: {
+            display: true,
+            text: "Presión Turbo (bar)",
+            color: COLORS[3],
+            font: {
+              size: TEXTSIZE, // tamaño de letra en px
+            },
+          },
+          ticks: {
+            color: COLORS[3],
             font: {
               size: TEXTSIZE, // tamaño de letra en px
             },

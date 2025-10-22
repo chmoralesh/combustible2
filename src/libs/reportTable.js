@@ -67,10 +67,11 @@
 
 export const drawReportTable = (doc, dataRows, options) => {
   const { startX, startY, pageWidth, margin, spacing = 5 } = options;
-  const totalCols = 5; // Número total de columnas
+  const totalCols = 6; // Número total de columnas
   const firstColWidth = 40;
-  const totalWidth = pageWidth - 2 * margin - firstColWidth; // Ancho total disponible menos la primera columna
-  const colWidth = totalWidth / (totalCols - 1); // Resto de columnas
+  const secondColWidth = 100;
+  const totalWidth = pageWidth - 2 * margin - firstColWidth - secondColWidth; // Ancho total disponible menos la primera columna
+  const colWidth = totalWidth / (totalCols - 2); // Resto de columnas
 
   const headerColor = "#008080"; // Color de fondo teal
   //   const dataRedondear = dataRows.map((row, index) => {
@@ -105,13 +106,13 @@ export const drawReportTable = (doc, dataRows, options) => {
       {
         label: "Fecha",
         property: "fecha",
-        width: colWidth,
+        width: secondColWidth,
         headerColor: headerColor,
         headerOpacity: 1,
         renderer: null,
       },
       {
-        label: "Consumo [l/NM]",
+        label: "Pitch [%]",
         property: "price1",
         width: colWidth,
         headerColor: headerColor,
@@ -119,7 +120,7 @@ export const drawReportTable = (doc, dataRows, options) => {
         renderer: null,
       },
       {
-        label: "Pitch [%]",
+        label: "Velocidad [Kn]",
         property: "price2",
         width: colWidth,
         headerColor: headerColor,
@@ -127,8 +128,16 @@ export const drawReportTable = (doc, dataRows, options) => {
         renderer: null,
       },
       {
-        label: "Velocisad [kt]",
+        label: "Rendimiento [l/Nm]",
         property: "price3",
+        width: colWidth,
+        headerColor: headerColor,
+        headerOpacity: 1,
+        renderer: null,
+      },
+      {
+        label: "Presión Turbo [bar]",
+        property: "price4",
         width: colWidth,
         headerColor: headerColor,
         headerOpacity: 1,

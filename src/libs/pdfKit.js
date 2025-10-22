@@ -26,19 +26,54 @@ export const buildPDF = (
   drawHeader(doc, logoPath, logoPathClient, margin, pageWidth, pageTitle);
 
   //-----------------Tabla 1-----------------------
+  //acondicionando datos
+  function formatearFechaChilena(fechaISO) {
+    const fechaLocal = new Date(fechaISO);
+
+    // Formatear la fecha y hora en zona horaria chilena
+    const opciones = {
+      timeZone: "America/Santiago",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    };
+
+    const fechaChilena = fechaLocal
+      .toLocaleString("es-CL", opciones)
+      .replace(",", "");
+
+    const [fechaStr, horaStrRaw] = fechaChilena.split(" ");
+
+    // Si por alguna razón el formato local retorna "24" en la hora, la convertimos a "00"
+    const horaStr = horaStrRaw.startsWith("24")
+      ? horaStrRaw.replace("24", "00")
+      : horaStrRaw;
+
+    return { fecha: fechaStr, hora: horaStr };
+  }
+
+  const inicio = formatearFechaChilena(desde);
+  const fin = formatearFechaChilena(hasta);
+
   const tables = [
     {
       headers: ["Inicio", ""],
       rows: [
-        ["Fecha", desde.slice(0, 10)],
-        ["Hora", desde.slice(11, 19)],
+        // ["Fecha", desde.slice(0, 10)],
+        // ["Hora", desde.slice(11, 19)],
+        ["Fecha", inicio.fecha],
+        ["Hora", inicio.hora],
       ],
     },
     {
       headers: ["Fin", ""],
       rows: [
-        ["Fecha", hasta.slice(0, 10)],
-        ["Hora", hasta.slice(11, 19)],
+        ["Fecha", fin.fecha],
+        ["Hora", fin.hora],
       ],
     },
     {
@@ -174,12 +209,34 @@ export const buildPDF = (
   ];
   const tableRows = datos[1].reverse();
 
-  // doc.on("pageAdded", () => {
-  //   drawHeader(doc, logoPath, logoPathClient, margin, pageWidth, pageTitle2);
-  //   doc.y = 300;
-  // });
+  //formatear fecha
 
-  drawReportTable(doc, tableRows, {
+  const dataFormateada = tableRows.map((row) => {
+    const fechaISO = row[1];
+    const d = new Date(fechaISO);
+
+    // Formatear fecha a DD-MM-AAAA HH:MM:SS
+    const fechaFormateada = d
+      .toLocaleString("es-CL", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      })
+      .replace(",", "");
+
+    // Reemplazar la fecha en el array original
+    return [row[0], fechaFormateada, ...row.slice(2)];
+  });
+
+  console.log(dataFormateada);
+
+  //console.log("En pdfkit", tableRows);
+
+  drawReportTable(doc, dataFormateada, {
     startX: margin,
     startY: doc.y,
     pageWidth,

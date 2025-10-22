@@ -77,6 +77,8 @@ router.post("/invoice/pdf", (req, res) => {
     "Content-Disposition": "inline; filename=invoice.pdf",
   });
 
+  console.log("hasta aquí todo bien");
+
   buildPDF(
     (chunk) => res.write(chunk),
     () => res.end(),

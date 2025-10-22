@@ -9,37 +9,39 @@
     <title>Document</title>
   </head>
   <body>
-    <h2>Generar Reporte PDF</h2>
-    <form action="/invoice/pdf" method="GET">
-      <label for="Fecha inicio">Fecha y hora de Inicio:</label>
-      <input
-        class="datepicker input"
-        type="text"
-        name="fechaHoraInicio"
-        id="fechaHoraInicio"
-      />
-      <label>Fecha y hora Fin:</label>
-      <input
-        class="datepicker input"
-        type="text"
-        name="fechaHoraFin"
-        id="fechaHoraFin"
-      />
-      <label>Operador:</label>
-      <input class="input" type="text" id="nombre" name="nombre" />
-      <label>Comentario:</label>
-      <textarea
-        class="input textarea"
-        type="textarea"
-        id="comentario"
-        name="comentario"
-      ></textarea>
+    <div class="container">
+      <h2>Generar Reporte PDF</h2>
+      <form action="/invoice/pdf" method="GET" class="form-container">
+        <label for="Fecha inicio">Fecha y hora de Inicio:</label>
+        <input
+          class="datepicker input"
+          type="text"
+          name="fechaHoraInicio"
+          id="fechaHoraInicio"
+        />
+        <label>Fecha y hora Fin:</label>
+        <input
+          class="datepicker input"
+          type="text"
+          name="fechaHoraFin"
+          id="fechaHoraFin"
+        />
+        <label>Operador:</label>
+        <input class="input" type="text" id="nombre" name="nombre" />
+        <label>Comentario:</label>
+        <textarea
+          class="input textarea"
+          type="textarea"
+          id="comentario"
+          name="comentario"
+        ></textarea>
 
-      <button class="pdfSubmit" type="submit" id="pdfSubmit">
+        <!-- <button class="pdfSubmit" type="submit" id="pdfSubmit">
         Generar PDF
-      </button>
-    </form>
-    <button class="pdfSubmit" id="pdfView">Ver PDF</button>
+      </button> -->
+        <button class="pdfSubmit" id="pdfView">Generar PDF</button>
+      </form>
+    </div>
     <script src="./flatpickr.min.js"></script>
     <script type="module" src="./index.js"></script>
     <script type="module" src="./setFormData.js"></script>
